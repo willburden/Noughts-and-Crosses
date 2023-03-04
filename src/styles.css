@@ -1,0 +1,283 @@
+/*=============================================================================*
+ |   General                                                                   |
+ *=============================================================================*/
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html, body, #root {
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+h1, h2 {
+    font-size: 1.5em;
+    font-weight: normal;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+ol {
+    list-style-position: inside;
+}
+
+h1, h2, li {
+    line-height: 1.5em;
+}
+
+.board,
+.turn-history {
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+}
+
+/*=============================================================================*
+ |   Layout                                                                    |
+ *=============================================================================*/
+
+.game {
+    padding-top: 15%;
+    padding-bottom: 15%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: max-content;
+    grid-template-rows: min-content min-content min-content;
+    grid-template-areas:
+        "turn"
+        "board"
+        "hist";
+    align-content: start;
+}
+
+@media (orientation: landscape) {
+    #root {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .game {
+        padding: 0;
+        grid-template-columns: min-content max-content;
+        grid-template-rows: min-content min-content;
+        grid-template-areas:
+            "turn ."
+            "board hist";
+    }
+
+    .game > .turn-history {
+        margin: 0;
+        margin-left: 10px;
+    }
+
+    .turn-history h2,
+    .turn-history li {
+        padding: 0 10px;
+    }
+}
+
+.game > .turn-display {
+    grid-area: turn;
+}
+
+.game > .board {
+    grid-area: board;
+}
+
+.game > .turn-history {
+    grid-area: hist;
+    margin-top: 10px;
+}
+
+.turn-display {
+    text-align: left;
+}
+
+/*=============================================================================*
+ |   Board                                                                     |
+ *=============================================================================*/
+
+.board {
+    display: grid;
+    width: 70vw;
+    height: auto;
+    aspect-ratio: 1;
+    margin: 5px 0;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    background-color: black;
+    gap: 2px;
+    border: 2px solid black;
+    
+}
+
+@media (width >= 450px) {
+    .board {
+        width: 300px;
+    }
+}
+
+.square {
+    position: relative;
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    overflow: hidden;
+}
+
+.square:hover::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: rgb(105, 135, 255);
+}
+
+.square:hover:not(.empty) {
+    cursor: not-allowed;
+}
+
+.square.empty:hover {
+    cursor: pointer;
+}
+
+.square.empty:active::after {
+    color: rgb(58, 97, 255);
+}
+
+.board.noughts-turn .square.empty:hover::after,
+.board.noughts-turn .square.empty:active::after {
+    content: "O";
+}
+
+.board.crosses-turn .square.empty:hover::after,
+.board.crosses-turn .square.empty:active::after {
+    content: "X";
+}
+
+.board:not(.noughts-turn):not(.crosses-turn) .square.empty:hover {
+    cursor: not-allowed;
+}
+
+.board {
+    position: relative;
+}
+
+.board .winning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.winning-line path {
+    stroke-width: 0.4px;
+}
+
+/*=============================================================================*
+ |   Turn history                                                              |
+ *=============================================================================*/
+
+.turn-history.empty {
+    visibility: hidden;
+}
+
+.turn-history h2 {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.turn-history small {
+    color: rgb(242, 153, 162);
+    font-style: italic;
+    margin-left: 5px;
+    vertical-align: middle;
+    visibility: hidden;
+}
+
+.turn-history:not(.empty) > div:hover small,
+.turn-history:not(.empty) > div:active small {
+    visibility: visible;
+}
+
+.turn-history:active small {
+    color: rgb(249, 120, 148);
+}
+
+.turn-history li {
+    text-align: center;
+}
+
+.turn-history li .player {
+    font-style: italic;
+}
+
+.turn-history li:hover,
+.turn-history h2:hover {
+    cursor: pointer;
+}
+
+.turn-history:not(:active) li:hover,
+.turn-history:not(:active) li:hover ~ li,
+.turn-history:not(:active) h2:hover ~ ol li,
+.turn-history li:active,
+.turn-history li:active ~ li,
+.turn-history h2:active ~ ol li {
+    text-decoration: line-through;
+    text-decoration-thickness: 1px;
+}
+
+.turn-history:not(:active) li:hover,
+.turn-history:not(:active) li:hover ~ li,
+.turn-history:not(:active) h2:hover ~ ol li {
+    background-color: rgba(255, 202, 207);
+}
+
+.turn-history li:active,
+.turn-history li:active ~ li,
+.turn-history h2:active ~ ol li {
+    background-color: rgb(255, 189, 201);
+}
+
+.turn-history li {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.turn-history:not(:active) li:hover ~ li,
+.turn-history:not(:active) h2:hover ~ ol li:not(:first-child),
+.turn-history li:active ~ li,
+.turn-history h2:active ~ ol li:not(:first-child) {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.turn-history li:last-child {
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
