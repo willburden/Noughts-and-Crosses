@@ -6,14 +6,26 @@ on:
 #     tags: 'v*.*.*'
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
+      
       - name: Install dependencies
         run: yarn install --immutable
+        
       - name: Check code quality
         run: yarn eslint . && yarn tsc --noEmit
+        
       - name: Produce bundle
         run: yarn build
+        
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
