@@ -21,10 +21,10 @@ export const branchOnOptPlayer = (
 ) => <N, C, F>(
   if_noughts: N,
   if_crosses: C,
-  if_falsy: F,
+  if_nullish: F,
 ) => {
   if (player === null || player === undefined) {
-    return if_falsy;
+    return if_nullish;
   } else {
     return branchOnPlayer(player)(if_noughts, if_crosses);
   }
