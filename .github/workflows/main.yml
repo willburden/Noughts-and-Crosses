@@ -1,0 +1,19 @@
+name: Deploy to Github Pages
+
+on:
+  push:
+    branches: '*'
+#     tags: 'v*.*.*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Check code quality
+        run: yarn eslint . && yarn tsc --noEmit
+      - name: Produce bundle
+        run: yarn build
