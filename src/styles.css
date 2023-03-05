@@ -220,7 +220,7 @@ h1, li {
     visibility: visible;
 }
 
-@media (any-hover: hover) {
+@media (hover: hover) {
     .turn-history:not(.empty) > div:hover small {
         visibility: visible;
     }
