@@ -3,6 +3,7 @@ name: Deploy to Github Pages
 on:
   push:
     tags: 'v*.*.*'
+    branches: 'bugfix/revert-lingering-on-mobile'
 
 jobs:
   build-and-deploy:
